@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>CLIP Logo Detector</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; max-width: 800px; }
+    .box { border: 1px solid #ddd; padding: 16px; border-radius: 8px; }
+    .row { margin-top: 12px; }
+    code { background: #f6f8fa; padding: 2px 6px; border-radius: 6px; }
+    pre { background: #f6f8fa; padding: 12px; border-radius: 8px; overflow: auto; }
+  </style>
+</head>
+<body>
+  <h2>CLIP Logo Detector</h2>
+  <div class="box">
+    <div>Upload an image. Returns <code>1</code> if it contains a logo of Coca-Cola, Disney, Starbucks, or McDonald's; else <code>0</code>.</div>
+    <div class="row">
+      <input type="file" id="file" accept="image/*" />
+      <button onclick="send()">Predict</button>
+    </div>
+    <div class="row"><pre id="out"></pre></div>
+  </div>
+
+<script>
+async function send() {
+  const f = document.getElementById("file").files[0];
+  if (!f) { alert("Choose an image first"); return; }
+  const fd = new FormData();
+  fd.append("file", f);
+
+  const r = await fetch("/predict", { method: "POST", body: fd });
+  const j = await r.json();
+  document.getElementById("out").innerText = JSON.stringify(j, null, 2);
+}
+</script>
+</body>
+</html>
